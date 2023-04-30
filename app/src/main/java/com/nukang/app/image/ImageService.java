@@ -29,9 +29,18 @@ public class ImageService {
         MediaType contentType =  MediaType.IMAGE_JPEG;
         Resource resource = null;
         try {
-            System.out.println("file:///"+BASE_DIR+"/userResources/"+ uid +".png");
-            resource = new UrlResource("file:///"+BASE_DIR+"/userResources/"+ uid +".png");
-        } catch (IOException e) {
+            System.out.println(BASE_DIR+"/userResources/"+ uid +".png");
+            resource = new UrlResource("file://"+BASE_DIR+"/userResources/"+ uid +".png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resource != null && !resource.exists() && !resource.isReadable()){
+            try {
+                resource = new UrlResource("file://"+BASE_DIR+"/app/userResources/placeholder.png");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
         return ResponseEntity.ok()
                 .contentType(contentType)

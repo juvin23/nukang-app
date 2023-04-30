@@ -50,7 +50,6 @@ public class ImageController {
         try {
              res = imageService.getImage(uid);
         }catch (Exception e){
-            log.info(e.getMessage());
         }
         return res;
     }
