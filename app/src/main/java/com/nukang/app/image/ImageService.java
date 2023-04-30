@@ -37,7 +37,7 @@ public class ImageService {
 
         if(resource != null && !resource.exists() && !resource.isReadable()){
             try {
-                resource = new UrlResource("file://"+BASE_DIR+"/app/userResources/placeholder.png");
+                resource = new UrlResource("file://"+BASE_DIR+"/userResources/placeholder.png");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
