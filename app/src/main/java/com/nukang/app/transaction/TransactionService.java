@@ -113,20 +113,22 @@ public class TransactionService implements TransactionConstants {
         System.out.println("[approve-transaksi] status : " + dbTrans.getRecordStatus());
         System.out.println("appuser : " + appUser.getUserId());
         System.out.println("txnId   : " + dbTrans.getTransactionId());
-        if(!appUser.getUserId().equals(dbTrans.getMerchantId())) throw new Exception("tidak berhak merubah transaksi.");
+        dbTrans.setIsSeen(1);
         switch (dbTrans.getRecordStatus()) {
             case status.REQUEST_DATE:
+                if(!appUser.getUserId().equals(dbTrans.getMerchantId())) throw new Exception("tidak berhak merubah transaksi.");
                 dbTrans.setRecordStatus(status.APPROVED_DATE);
                 break;
             case status.REQUEST_PRICE:
+                if(!appUser.getUserId().equals(dbTrans.getMerchantId())) throw new Exception("tidak berhak merubah transaksi.");
                 dbTrans.setRecordStatus(status.APPROVED_PRICE);
                 break;
             case status.APPROVED_PRICE:
                 dbTrans.setRecordStatus(status.DONE);
+                dbTrans.setIsSeen(2);
                 break;
         }
         dbTrans.setLastUpdated(LocalDateTime.now());
-        dbTrans.setIsSeen(1);
         try{
             save(dbTrans);
         }catch (Exception e){
