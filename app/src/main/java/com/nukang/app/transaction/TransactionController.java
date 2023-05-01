@@ -55,16 +55,13 @@ public class TransactionController {
     @PutMapping("/request-price/{trxId}")
     private ResponseEntity requestPrice(@PathVariable(name = "trxId") String trxId,
                                         @RequestParam("amount") long amount,
-                                        @RequestParam("startdate") String startDate,
-                                        @RequestParam("enddate") String endDate,
                                         Principal principal){
         AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
-        if(appUser == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(appUser == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         Transaction updated = null;
         try {
-            updated = service.requestPrice(trxId,LocalDate.parse(startDate), LocalDate.parse(endDate), amount,appUser);
+            updated = service.requestPrice(trxId, amount,appUser);
         }catch (Exception e){
-            // nanti dibuat custom error
             return ResponseEntity.ok(e.getMessage());
         }
 
@@ -85,10 +82,24 @@ public class TransactionController {
 
         return ResponseEntity.ok(updated);
     }
+
+    @PutMapping("/clear-notif")
+    private ResponseEntity approve(Principal principal){
+        AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
+        if(appUser == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try {
+            service.clearNotif(appUser);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok(appUser);
+    }
+
     @PutMapping("/reject/{tId}")
     public ResponseEntity reject(@PathVariable("tId") String transactionId, @RequestParam("reason") String reason, Principal principal){
         AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
-        if(appUser == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if(appUser == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         try{
             service.reject(transactionId,reason, appUser);
         }catch (Exception e){

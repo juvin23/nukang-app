@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -74,6 +75,7 @@ public class TransactionService implements TransactionConstants {
                 .orElseThrow(()->new Exception(""));
         dbTrans.setRecordStatus(status.REJECTED);
         dbTrans.setUpdateBy(appUser.getUserId());
+        dbTrans.setIsSeen(appUser.getUserId().equals(dbTrans.getMerchantId())? 1 : 2);
         dbTrans.setDeniedReason(reason);
         dbTrans.setLastUpdated(LocalDateTime.now());
         try{
@@ -86,19 +88,16 @@ public class TransactionService implements TransactionConstants {
     }
 
     public Transaction requestPrice(String transactionId,
-                                    LocalDate startdate,
-                                    LocalDate enddate,
                                     long price,
                                     AppUser appUser) throws Exception {
         Transaction dbTrans = transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(()->new Exception("Transaksi tidak ada."));
         if(!appUser.getUserId().equals(dbTrans.getCustomerId()))throw new Exception("Tidak berhak merubah transaksi");
         dbTrans.setRecordStatus(status.REQUEST_PRICE);
-        dbTrans.setStartDate(startdate);
-        dbTrans.setEndDate(enddate);
         dbTrans.setAmount(BigDecimal.valueOf(price));
         dbTrans.setLastUpdated(LocalDateTime.now());
         dbTrans.setUpdateBy(appUser.getUserId());
+        dbTrans.setIsSeen(2);
         try{
             save(dbTrans);
         }catch (Exception e){
@@ -119,6 +118,7 @@ public class TransactionService implements TransactionConstants {
         if(dbTrans.getRecordStatus().equals(status.REQUEST_PRICE))dbTrans.setRecordStatus(status.APPROVED_PRICE);
         if(dbTrans.getRecordStatus().equals(status.APPROVED_PRICE))dbTrans.setRecordStatus(status.DONE);
         dbTrans.setLastUpdated(LocalDateTime.now());
+        dbTrans.setIsSeen(1);
         try{
             save(dbTrans);
         }catch (Exception e){
@@ -126,5 +126,10 @@ public class TransactionService implements TransactionConstants {
             throw e;
         }
         return dbTrans;
+    }
+
+    public AppUser clearNotif(AppUser appUser) {
+        transactionRepository.clearNotif(appUser.getUserId());
+        return appUser;
     }
 }
