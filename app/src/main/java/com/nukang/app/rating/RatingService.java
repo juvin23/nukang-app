@@ -18,7 +18,7 @@ public class RatingService {
     }
 
     void validateRating(Rating rating) throws  Exception{
-        if(rating.getRating()<=5 && rating.getRating() >=0)
+        if(rating.getRating() > 5 && rating.getRating() <= 0)
             throw new Exception("rating out of range");
     }
 }
