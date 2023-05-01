@@ -37,7 +37,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println(role + " ROLE");
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
     }
 
