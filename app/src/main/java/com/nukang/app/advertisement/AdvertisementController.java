@@ -1,5 +1,7 @@
 package com.nukang.app.advertisement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import java.net.MalformedURLException;
 @RestController
 @RequestMapping("api/v1/ads")
 public class AdvertisementController {
+    private Logger log = LoggerFactory.getLogger(AdvertisementController.class);
     static String BASE_DIR = System.getProperty("user.dir");
     @GetMapping("/get-ads")
     @ResponseBody
@@ -22,7 +25,7 @@ public class AdvertisementController {
         Resource in = null;
         try {
             if(BASE_DIR.startsWith("/") )BASE_DIR = BASE_DIR.substring(1);
-            in = new UrlResource("file:///"+BASE_DIR+"/promosiResources/promosi.jpg");
+            in = new UrlResource("file:///"+BASE_DIR+"/promosiResource/promosi.jpg");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
