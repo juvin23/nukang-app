@@ -45,9 +45,8 @@ public class Merchant extends Audited {
     private String provinceCode;
 
     @OneToOne
-    @JoinColumn(name = "merchant_province")
+    @JoinColumn(name = "province_code",insertable = false,updatable = false)
     private Province province;
-
 
     @OneToOne
     @JoinColumn(name = "merchant_city",insertable = false,updatable = false)
