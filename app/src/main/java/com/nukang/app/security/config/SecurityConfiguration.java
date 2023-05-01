@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/v1/promosi/get-promosi")
+                .antMatchers("/api/v1/ads/get-ads")
                 .permitAll()
                 .antMatchers("/api/v1/images/get-profile-image/**")
                 .permitAll()

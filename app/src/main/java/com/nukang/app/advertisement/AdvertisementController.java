@@ -1,6 +1,5 @@
-package com.nukang.app.promosi;
+package com.nukang.app.advertisement;
 
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -10,20 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
 
 @RestController
-@RequestMapping("api/v1/promosi")
-public class PromosiController {
-    final static String BASE_DIR = System.getProperty("user.dir");
-    @GetMapping("/get-promosi")
+@RequestMapping("api/v1/ads")
+public class AdvertisementController {
+    static String BASE_DIR = System.getProperty("user.dir");
+    @GetMapping("/get-ads")
     @ResponseBody
     public ResponseEntity getImageDynamicType() {
         MediaType contentType = MediaType.IMAGE_JPEG;
         Resource in = null;
         try {
-            in = new UrlResource("file://"+BASE_DIR+"/userResources/promosi.jpg");
+            if(BASE_DIR.startsWith("/") )BASE_DIR = BASE_DIR.substring(1);
+            in = new UrlResource("file:///"+BASE_DIR+"/promosiResources/promosi.jpg");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

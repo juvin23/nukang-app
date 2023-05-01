@@ -30,11 +30,11 @@ public class ImageController {
                                       @RequestParam("image") MultipartFile file,
                                       HttpServletRequest request) throws IOException {
         try{
-            System.out.println("----------------");
-            System.out.println(file.getOriginalFilename());
-            System.out.println(file.getName());
-            System.out.println(file.getContentType());
-            System.out.println("----------------");
+            log.info("----------------");
+            log.info(file.getOriginalFilename());
+            log.info(file.getName());
+            log.info(file.getContentType());
+            log.info("----------------");
             imageService.upload(directory, file);
         }catch (Exception e){
             e.printStackTrace();
@@ -50,6 +50,7 @@ public class ImageController {
         try {
              res = imageService.getImage(uid);
         }catch (Exception e){
+            log.info(e.getMessage());
         }
         return res;
     }

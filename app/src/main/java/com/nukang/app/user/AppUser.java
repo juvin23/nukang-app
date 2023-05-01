@@ -19,6 +19,8 @@ import java.util.List;
 @Entity
 @Table(name = "appuser")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AppUser implements UserDetails {
     @Column(name = "username")
     private String username;
