@@ -1,17 +1,20 @@
 package com.nukang.app.rating;
 
+import com.nukang.app.transaction.Transaction;
+import com.nukang.app.transaction.TransactionRepository;
 import com.nukang.app.user.AppUser;
 import com.nukang.app.user.AppUserRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,5 +33,19 @@ public class RatingController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("")
+    public ResponseEntity getRating(@PageableDefault Pageable pageable,
+                                    @QuerydslPredicate(root = Transaction.class, bindings = TransactionRepository.class) Predicate predicate){
+        Page ratingList = ratingService.getRating(pageable, predicate);
+
+        return ResponseEntity.ok(ratingList);
+    }
+
+    @GetMapping("total-rating/{userId}")
+    public ResponseEntity response(@PathVariable("userId") String userId){
+
+        return ResponseEntity.ok(ratingService.getTotalRating(userId));
     }
 }

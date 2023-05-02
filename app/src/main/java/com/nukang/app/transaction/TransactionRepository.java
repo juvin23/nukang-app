@@ -18,7 +18,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     Optional<Transaction> findByTransactionId(String transactionId);
 
     @Modifying
-    @Query(value = "update transaction set is_seen =0 where merchant_id = ?1 or customer_id =?1",nativeQuery = true)
+    @Query(value = "update transaction set is_seen = 0 where merchant_id = ?1 or customer_id =?1",nativeQuery = true)
     void clearNotif(String appUser);
 
     @Override

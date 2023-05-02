@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
 @Builder
 @Table(name="advertisement")

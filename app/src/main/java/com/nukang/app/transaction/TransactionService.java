@@ -139,7 +139,12 @@ public class TransactionService implements TransactionConstants {
     }
 
     public AppUser clearNotif(AppUser appUser) {
-        transactionRepository.clearNotif(appUser.getUserId());
+        try{
+            log.info("[clear-notif] " + appUser.getUserId() + " / " + appUser.getUsername());
+            transactionRepository.clearNotif(appUser.getUserId());
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
         return appUser;
     }
 }
