@@ -84,7 +84,9 @@ public class TransactionController {
     }
 
     @PutMapping("/clear-notif")
-    private ResponseEntity approve(@RequestBody AppUser appUser){
+    private ResponseEntity approve(Principal principal){
+        AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
+        if(appUser == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         try {
             service.clearNotif(appUser);
         }catch (Exception e){
