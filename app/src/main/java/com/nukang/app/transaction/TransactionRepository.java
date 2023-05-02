@@ -21,6 +21,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     @Query(value = "update transaction set is_seen = 0 where merchant_id = ?1 or customer_id =?1",nativeQuery = true)
     void clearNotif(String appUser);
 
+    @Query(value = "select count(*) as count, sum(amount) as amount from transaction where merchant_id = ?1 and amount > 0", nativeQuery = true)
+    TransactionCount countTransaction(String mId);
+
     @Override
     default void customize(QuerydslBindings bindings, QTransaction txn){
         StringPath[] customerAndMerchantId = new StringPath[] {txn.merchantId, txn.customerId};
@@ -28,5 +31,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         bindings.bind(txn.merchantId).first(StringExpression::containsIgnoreCase);
         bindings.bind(txn.customerId).first(StringExpression::containsIgnoreCase);
     };
+
+
 
 }

@@ -147,4 +147,8 @@ public class TransactionService implements TransactionConstants {
         }
         return appUser;
     }
+
+    public TransactionCount count(String mId) {
+        return transactionRepository.countTransaction(mId);
+    }
 }

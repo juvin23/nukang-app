@@ -39,6 +39,12 @@ public class TransactionController {
         return ResponseEntity.ok(transactions);
     }
 
+    @GetMapping("/count/{mId}")
+    private ResponseEntity transactionCount(@PathVariable(name = "mId") String mId){
+        TransactionCount count = service.count(mId);
+        return ResponseEntity.ok(count);
+    }
+
     @PostMapping("/create")
     private ResponseEntity create(@RequestBody Transaction paramTrx) throws JsonProcessingException {
         Transaction created = null;
