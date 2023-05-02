@@ -7,10 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 
@@ -23,12 +20,22 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
     @GetMapping("/get-ads")
-    @ResponseBody
-    public ResponseEntity getImageDynamicType() {
+    public ResponseEntity getAds() {
 
         ResponseEntity res = null;
         try {
             res = advertisementService.getActive();
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return res;
+    }
+
+    @GetMapping("/get-ads/{uid}")
+    public ResponseEntity getAdBanner(@PathVariable("uid") long uid){
+        ResponseEntity res = null;
+        try {
+            res = advertisementService.getAdBanner(uid);
         }catch (Exception e){
             log.info(e.getMessage());
         }

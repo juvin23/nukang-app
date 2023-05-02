@@ -1,5 +1,6 @@
 package com.nukang.app.advertisement;
 
+import com.nukang.app.image.ImageModel;
 import com.nukang.app.image.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,30 +24,35 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     static String BASE_DIR = System.getProperty("user.dir");
 
-    ResponseEntity<List<byte[]>> getActive(){
+    ResponseEntity getActive(){
         log.info("[ads-service] start");
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<Advertisement> advertisements = advertisementRepository.selectActive(formatter.format(today));
 
-        if(advertisements.size() <= 0){
-            MediaType contentType = MediaType.IMAGE_JPEG;
-            Resource in = null;
+
+        log.info("[ads-service] end");
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(advertisements);
+    }
+
+    ResponseEntity getAdBanner(long uid){
+        Advertisement ad = advertisementRepository.findById(uid).orElse(null);
+        if(ad == null){
             try {
-                if(BASE_DIR.startsWith("/") )BASE_DIR = BASE_DIR.substring(1);
-                in = new UrlResource("file:///"+BASE_DIR+"/promosiResource/promosi.jpg");
+                if(BASE_DIR.startsWith("/"))BASE_DIR = BASE_DIR.substring(1);
+                Resource resource = new UrlResource("file:///"+BASE_DIR+"/promosiResource/promosi.png");
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(resource);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         }
-
-        List<byte[]> ads = advertisements.stream()
-                                        .map(ad -> ImageUtils
-                                        .decompressImage(ad.getImageData()))
-                                        .collect(Collectors.toList());
-        log.info("[ads-service] end");
+        byte[] image = ImageUtils.decompressImage(ad.getImageData());
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_PNG)
-                .body(ads);
+                .body(image);
     }
 }
