@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement,Long> {
-    @Query(value = "select * from advertisement where start_date <= to_date(?1,'yyyy-MM-dd') and end_date>= to_date(?1,'yyyy-MM-dd')")
+    @Query(value = "select * from advertisement where start_date <= to_date(?1,'yyyy-MM-dd') and end_date>= to_date(?1,'yyyy-MM-dd')",nativeQuery = true)
     List<Advertisement> selectActive(String today);
 }
