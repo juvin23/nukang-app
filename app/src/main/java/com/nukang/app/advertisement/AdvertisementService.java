@@ -33,7 +33,7 @@ public class AdvertisementService {
 
         log.info("[ads-service] end");
         return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(advertisements);
     }
 
