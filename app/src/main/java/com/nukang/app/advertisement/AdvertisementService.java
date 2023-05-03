@@ -42,7 +42,7 @@ public class AdvertisementService {
         if(ad == null){
             try {
                 if(BASE_DIR.startsWith("/"))BASE_DIR = BASE_DIR.substring(1);
-                Resource resource = new UrlResource("file:///"+BASE_DIR+"/promosiResource/promosi.png");
+                Resource resource = new UrlResource("file:///"+BASE_DIR+"/promosiResource/promosi.jpg");
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_PNG)
                         .body(resource);
