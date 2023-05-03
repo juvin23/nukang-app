@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -148,7 +146,7 @@ public class TransactionService implements TransactionConstants {
         return appUser;
     }
 
-    public TransactionCount count(String mId) {
+    public TransactionCountInterface count(String mId) {
         return transactionRepository.countTransaction(mId);
     }
 }

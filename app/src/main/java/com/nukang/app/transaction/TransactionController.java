@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class TransactionController {
 
     @GetMapping("/count/{mId}")
     private ResponseEntity transactionCount(@PathVariable(name = "mId") String mId){
-        TransactionCount count = service.count(mId);
+        TransactionCountInterface count = service.count(mId);
         return ResponseEntity.ok(count);
     }
 
