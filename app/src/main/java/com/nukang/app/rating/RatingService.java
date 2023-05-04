@@ -2,6 +2,7 @@ package com.nukang.app.rating;
 
 import com.nukang.app.user.AppUser;
 import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class RatingService {
-    @Autowired
-    RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
     private Logger log = LoggerFactory.getLogger(RatingService.class);
 
     public Rating post(Rating rating, AppUser appUser) throws Exception {

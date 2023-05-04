@@ -8,5 +8,6 @@ public interface TransactionConstants {
         String APPROVED_PRICE = "4";
         String REJECTED = "X";
         String DONE = "5";
+        String CANCELLED = "XX";
     }
 }

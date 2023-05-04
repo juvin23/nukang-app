@@ -35,7 +35,7 @@ public class Merchant extends Audited {
     @Column(name = "merchant_address")
     private String address;
 
-    @Column(name = "merchant_city")
+    @Column(name = "city_id")
     private String cityCode;
 
     @Column(name = "rating")

@@ -68,6 +68,23 @@ public class TransactionService implements TransactionConstants {
         return transactions;
     }
 
+    public Transaction cancel(String transactionId, String reason, AppUser appUser) throws Exception{
+        Transaction dbTrans = transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(()->new Exception(""));
+        dbTrans.setRecordStatus(status.CANCELLED);
+        dbTrans.setUpdateBy(appUser.getUserId());
+        dbTrans.setIsSeen(appUser.getUserId().equals(dbTrans.getMerchantId())? 1 : 2);
+        dbTrans.setDeniedReason(reason);
+        dbTrans.setLastUpdated(LocalDateTime.now());
+        try{
+            save(dbTrans);
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw e;
+        }
+        return dbTrans;
+    }
+
     public Transaction reject(String transactionId, String reason, AppUser appUser) throws Exception{
         Transaction dbTrans = transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(()->new Exception(""));

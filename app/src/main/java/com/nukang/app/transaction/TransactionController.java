@@ -112,4 +112,16 @@ public class TransactionController {
         }
         return ResponseEntity.ok("");
     }
+
+    @PutMapping("/cancel/{tId}")
+    public ResponseEntity cancel(@PathVariable("tId") String transactionId, @RequestParam("reason") String reason, Principal principal){
+        AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
+        if(appUser == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        try{
+            service.cancel(transactionId,reason, appUser);
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+        return ResponseEntity.ok("");
+    }
 }
