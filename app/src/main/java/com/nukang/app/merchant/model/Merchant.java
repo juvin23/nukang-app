@@ -49,7 +49,7 @@ public class Merchant extends Audited {
     private Province province;
 
     @OneToOne
-    @JoinColumn(name = "merchant_city",insertable = false,updatable = false)
+    @JoinColumn(name = "city_id",insertable = false,updatable = false)
     private City city;
 
     @Column(name = "last_login")
