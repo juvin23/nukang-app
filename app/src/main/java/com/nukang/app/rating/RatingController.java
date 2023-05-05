@@ -1,5 +1,7 @@
 package com.nukang.app.rating;
 
+import com.nukang.app.merchant.model.Merchant;
+import com.nukang.app.merchant.repository.MerchantRepository;
 import com.nukang.app.transaction.Transaction;
 import com.nukang.app.transaction.TransactionRepository;
 import com.nukang.app.user.AppUser;
@@ -21,14 +23,22 @@ import java.util.Map;
 @RequestMapping("api/v1/rating")
 public class RatingController {
     private final RatingService ratingService;
+    private final MerchantRepository merchantRepository;
     private final AppUserRepository appUserRepository;
 
     @PostMapping("")
     public ResponseEntity postRating(@RequestBody Rating rating, Principal principal) {
         Rating posted = null;
         AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
+        Merchant merchant = merchantRepository.findByMerchantId(rating.getMerchantId());
         try {
             posted = ratingService.post(rating,appUser);
+            if(merchant!= null){
+                int ratingCount = merchant.getRatingCount();
+                merchant.setRating(merchant.getRating()*ratingCount + rating.getRating());
+                merchant.setRatingCount(ratingCount+1);
+                merchant.setRating(merchant.getRating()/ratingCount);
+            }
             return ResponseEntity.ok(posted);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -37,7 +47,7 @@ public class RatingController {
 
     @GetMapping("")
     public ResponseEntity getRating(@PageableDefault Pageable pageable,
-                                    @QuerydslPredicate(root = Transaction.class, bindings = TransactionRepository.class) Predicate predicate){
+                                    @QuerydslPredicate(root = Rating.class, bindings = RatingRepository.class) Predicate predicate){
         Page ratingList = ratingService.getRating(pageable, predicate);
 
         return ResponseEntity.ok(ratingList);

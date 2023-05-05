@@ -68,6 +68,8 @@ public class MerchantService {
         merchant.setCreatedBy("System");
         merchant.setCreatedOn(LocalDateTime.now());
         merchant.setStatus("created");
+        merchant.setRating(0);
+        merchant.setRatingCount(0);
         try {
             merchantRepository.save(merchant);
         }catch (Exception e){

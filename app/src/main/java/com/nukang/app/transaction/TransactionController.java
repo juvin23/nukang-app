@@ -33,7 +33,8 @@ public class TransactionController {
         try {
             transactions = service.list(predicate, pageable);
         }catch (Exception e){
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.internalServerError()
+                                .body(e.getMessage());
         }
         return ResponseEntity.ok(transactions);
     }
@@ -52,7 +53,8 @@ public class TransactionController {
             created = service.create(paramTrx);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.internalServerError()
+                                .body(e.getMessage());
         }
         return ResponseEntity.ok(created);
     }
@@ -67,7 +69,8 @@ public class TransactionController {
         try {
             updated = service.requestPrice(trxId, amount,appUser);
         }catch (Exception e){
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.internalServerError()
+                                .body(e.getMessage());
         }
 
         return ResponseEntity.ok(updated);
@@ -82,7 +85,8 @@ public class TransactionController {
             updated = service.approve(trxId,appUser);
         }catch (Exception e){
             // nanti dibuat custom error
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.internalServerError()
+                                .body(e.getMessage());
         }
 
         return ResponseEntity.ok(updated);

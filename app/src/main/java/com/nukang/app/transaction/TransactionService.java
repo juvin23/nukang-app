@@ -2,6 +2,7 @@ package com.nukang.app.transaction;
 
 import com.nukang.app.transactionHistory.service.TransactionHistoryService;
 import com.nukang.app.user.AppUser;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -153,10 +154,13 @@ public class TransactionService implements TransactionConstants {
         return dbTrans;
     }
 
+    @Transactional
     public AppUser clearNotif(AppUser appUser) {
         try{
             log.info("[clear-notif] " + appUser.getUserId() + " / " + appUser.getUsername());
-            transactionRepository.clearNotif(appUser.getUserId());
+            int count = transactionRepository.clearNotif(appUser.getUserId());
+
+            System.out.println("COUNT " + count);
         }catch (Exception e){
             log.info(e.getMessage());
         }

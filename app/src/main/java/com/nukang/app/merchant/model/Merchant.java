@@ -41,6 +41,9 @@ public class Merchant extends Audited {
     @Column(name = "rating")
     private double rating;
 
+    @Column(name = "rating_count")
+    private int ratingCount;
+
     @Column(name = "province_code")
     private String provinceCode;
 

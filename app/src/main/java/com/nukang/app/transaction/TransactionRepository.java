@@ -18,7 +18,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     @Modifying
     @Query(value = "update transaction set is_seen = 0 where merchant_id = ?1 or customer_id =?1",nativeQuery = true)
-    void clearNotif(String appUser);
+    int clearNotif(String appUser);
 
     @Query(value ="select new com.nukang.app.transaction.TransactionCountInterface(count(c.merchantId) , sum(c.amount)) from transaction c where c.merchantId = ?1 and c.amount > 0")
     TransactionCountInterface countTransaction(String mId);
