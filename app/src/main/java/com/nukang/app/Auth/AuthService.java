@@ -3,9 +3,11 @@ package com.nukang.app.Auth;
 import com.nukang.app.Auth.token.Token;
 import com.nukang.app.Auth.token.TokenRepository;
 import com.nukang.app.Auth.token.TokenType;
+import com.nukang.app.merchant.repository.MerchantRepository;
 import com.nukang.app.security.config.JwtService;
 import com.nukang.app.user.AppUser;
 import com.nukang.app.user.AppUserRepository;
+import com.nukang.app.user.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +28,17 @@ public class AuthService {
     private final AppUserRepository appuserRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final MerchantRepository merchantRepository;
+    private final CustomerRepository customerRepository;
 
     @Transactional(rollbackFor = {Exception.class})
     public AuthResponse register(AppUser user) throws Exception {
         AppUser dbUser = appuserRepository.findByUsername(user.getUsername()).orElse(null);
-        if(dbUser != null) throw new Exception("Username sudah digunakan");
+        if(dbUser != null){
+            if(merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
+                    || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent())
+            throw new Exception("Username sudah digunakan");
+        }
 
         String uuid = UUID.randomUUID()
                             .toString()

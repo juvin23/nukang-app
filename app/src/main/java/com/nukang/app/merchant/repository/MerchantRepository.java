@@ -24,7 +24,7 @@ public interface MerchantRepository extends JpaRepository<Merchant, Long>,
 
     Page<Merchant> findAll(Predicate predicate, Pageable pageable);
 
-    Merchant findByMerchantId(String id);
+    Optional<Merchant> findByMerchantId(String id);
     Merchant findByEmail(String email);
 
     @Override

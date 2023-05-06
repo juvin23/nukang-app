@@ -30,10 +30,11 @@ public class RatingController {
     public ResponseEntity postRating(@RequestBody Rating rating, Principal principal) {
         Rating posted = null;
         AppUser appUser = appUserRepository.findByUsername(principal.getName()).orElse(null);
-        Merchant merchant = merchantRepository.findByMerchantId(rating.getMerchantId());
+        Merchant merchant = merchantRepository.findByMerchantId(rating.getMerchantId()).orElse(null);
         try {
-            posted = ratingService.post(rating,appUser);
-            if(merchant!= null){
+
+            if(merchant!= null && appUser != null){
+                posted = ratingService.post(rating,appUser);
                 int ratingCount = merchant.getRatingCount();
                 merchant.setRating(merchant.getRating()*ratingCount + rating.getRating());
                 merchant.setRatingCount(ratingCount+1);

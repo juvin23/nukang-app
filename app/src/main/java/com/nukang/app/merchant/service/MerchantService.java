@@ -93,6 +93,6 @@ public class MerchantService {
     }
 
     public Merchant findById(String userId) {
-        return merchantRepository.findByMerchantId(userId);
+        return merchantRepository.findByMerchantId(userId).orElse(null);
     }
 }
