@@ -34,9 +34,9 @@ public class AuthService {
     @Transactional(rollbackFor = {Exception.class})
     public AuthResponse register(AppUser user) throws Exception {
         AppUser dbUser = appuserRepository.findByUsername(user.getUsername()).orElse(null);
-        if(dbUser != null){
-            if(merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
-                    || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent())
+        if(dbUser != null &&
+                (merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
+                || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent())){
             throw new Exception("Username sudah digunakan");
         }
 
