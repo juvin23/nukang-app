@@ -34,21 +34,26 @@ public class AuthService {
     @Transactional(rollbackFor = {Exception.class})
     public AuthResponse register(AppUser user) throws Exception {
         AppUser dbUser = appuserRepository.findByUsername(user.getUsername()).orElse(null);
-        if(dbUser != null &&
-                (merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
-                || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent())){
-            throw new Exception("Username sudah digunakan");
+        AppUser newUser = new AppUser();
+        if(dbUser != null){
+            newUser.setUserId(dbUser.getUserId());
+            if(merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
+                    || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent()
+                ){
+                throw new Exception("Username sudah digunakan");
+
+            }
+
         }
 
         String uuid = UUID.randomUUID()
                             .toString()
                             .replace("-","");
 
-        AppUser newUser = new AppUser();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRole(user.getRole());
-        newUser.setUserId(uuid);
+        if(dbUser.getUserId() == null)newUser.setUserId(uuid);
         log.info(newUser.getUserId() + " " + user.getUsername() + " " + user.getPassword());
         var savedUser = appuserRepository.save(newUser);
         var jwtToken = jwtService.generateToken(newUser);
