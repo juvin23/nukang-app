@@ -53,7 +53,7 @@ public class AuthService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRole(user.getRole());
-        if(dbUser.getUserId() == null)newUser.setUserId(uuid);
+        if(dbUser == null)newUser.setUserId(uuid);
         log.info(newUser.getUserId() + " " + user.getUsername() + " " + user.getPassword());
         var savedUser = appuserRepository.save(newUser);
         var jwtToken = jwtService.generateToken(newUser);
