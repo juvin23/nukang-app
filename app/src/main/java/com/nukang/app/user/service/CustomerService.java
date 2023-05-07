@@ -28,7 +28,7 @@ public class CustomerService {
     public Customer createCustomer(Customer customer) throws Exception {
         validateUser(customer);
         String uuid = customer.getCustomerId().trim();
-        while (customer.getCustomerId().trim().equals("") && customerRepository.findByCustomerId(uuid) != null){
+        while (customer.getCustomerId().trim().equals("") || customerRepository.findByCustomerId(uuid).isPresent()){
             uuid = UUID.randomUUID().toString().replace("-","");
         }
         customer.setCustomerId(uuid);
