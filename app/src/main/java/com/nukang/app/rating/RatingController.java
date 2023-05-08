@@ -35,10 +35,7 @@ public class RatingController {
 
             if(merchant!= null && appUser != null){
                 posted = ratingService.post(rating,appUser);
-                int ratingCount = merchant.getRatingCount();
-                merchant.setRating(merchant.getRating()*ratingCount + rating.getRating());
-                merchant.setRatingCount(ratingCount+1);
-                merchant.setRating(merchant.getRating()/ratingCount);
+
             }
             return ResponseEntity.ok(posted);
         } catch (Exception e) {
