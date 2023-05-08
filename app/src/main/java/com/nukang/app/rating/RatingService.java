@@ -31,10 +31,10 @@ public class RatingService {
         rating.setId(ratingId.replace("-",""));
         rating.setCreateDate(LocalDateTime.now());
         rating.setCreatedBy(appUser.getUserId());
-        Merchant merchant = merchantRepository.findByMerchantId(appUser.getUserId()).orElse(null);
+        Merchant merchant = merchantRepository.findByMerchantId(rating.getMerchantId()).orElse(null);
         if(merchant == null){
             log.error("Merchant tidak ditemukan  "  + appUser.getUserId());
-            return rating;
+            throw new Exception("Kesalahan System. Silahkan coba lagi.");
         }
         int ratingCount = merchant.getRatingCount();
         merchant.setRating(merchant.getRating()*ratingCount + rating.getRating());
