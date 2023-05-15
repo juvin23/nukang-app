@@ -1,5 +1,6 @@
 package com.nukang.app.security.config;
 
+import com.nukang.app.Auth.AuthService;
 import com.nukang.app.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final AppUserRepository appUserRepository;
+    private final AuthService authService;
 
     @Bean
     public UserDetailsService userDetailsService(){

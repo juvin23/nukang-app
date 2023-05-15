@@ -70,15 +70,16 @@ public class MerchantService {
         merchant.setStatus("created");
         merchant.setRating(0);
         merchant.setRatingCount(0);
+        Merchant savedMerchant = null;
         try {
-            merchantRepository.save(merchant);
+            savedMerchant = merchantRepository.save(merchant);
         }catch (Exception e){
             log.error("error creating merchant {}",merchant.getName() + merchant.getNumber());
             log.error(e.getMessage());
         }
         log.info("user created - {}", merchant.getMerchantId());
 
-        return merchant;
+        return savedMerchant;
     }
 
 
