@@ -33,18 +33,8 @@ public class AuthService {
 
     @Transactional(rollbackFor = {Exception.class})
     public AuthResponse register(AppUser user) throws Exception {
-        AppUser dbUser = appuserRepository.findByUsername(user.getUsername()).orElse(null);
         AppUser newUser = new AppUser();
-        if(dbUser != null){
-            newUser.setUserId(dbUser.getUserId());
-            if(merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
-                    || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent()
-                ){
-                throw new Exception("Username sudah digunakan");
-
-            }
-
-        }
+        isUserValid(user);
 
         String uuid = UUID.randomUUID()
                             .toString()
@@ -53,7 +43,7 @@ public class AuthService {
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRole(user.getRole());
-        if(dbUser == null)newUser.setUserId(uuid);
+        newUser.setUserId(uuid);
         log.info(newUser.getUserId() + " " + user.getUsername() + " " + user.getPassword());
         var savedUser = appuserRepository.save(newUser);
         var jwtToken = jwtService.generateToken(newUser);
@@ -65,6 +55,17 @@ public class AuthService {
                 .uid(newUser.getUserId())
                 .role(newUser.getRole())
                 .build();
+    }
+
+    public void isUserValid(AppUser appUser) throws Exception {
+        AppUser dbUser = appuserRepository.findByUsername(appUser.getUsername()).orElse(null);
+        if(dbUser != null){
+            if(merchantRepository.findByMerchantId(dbUser.getUserId()).isPresent()
+                    || customerRepository.findByCustomerId(dbUser.getUserId()).isPresent()
+            ){
+                throw new Exception("Username sudah digunakan");
+            }
+        }
     }
 
     public AuthResponse authenticate(AppUser request) throws Exception {

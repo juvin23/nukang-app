@@ -37,13 +37,14 @@ public class MerchantController{
 
     @PostMapping("/create")
     ResponseEntity createMerchant(@RequestBody Merchant merchant){
+        Merchant newMerchant;
         try {
             System.out.println(merchant.getMerchantCategory() + " CATEGORY");
-            Merchant newMerchant = service.createMerchant(merchant);
+            newMerchant = service.createMerchant(merchant);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok(e);
         }
-        return ResponseEntity.ok(merchant);
+        return ResponseEntity.ok(newMerchant);
     }
 }
