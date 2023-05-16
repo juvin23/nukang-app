@@ -32,28 +32,30 @@ public class ImageService {
     }
 
     public ResponseEntity getImage(String uid) {
-//        MediaType contentType =  MediaType.IMAGE_JPEG;
-//        Resource resource = null;
-//        try {
-//            System.out.println(BASE_DIR+"/userResources/"+ uid +".png");
-//            resource = new UrlResource("file://"+BASE_DIR+"/userResources/"+ uid +".png");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        if(resource != null && !resource.exists() && !resource.isReadable()){
-//            try {
-//                resource = new UrlResource("file://"+BASE_DIR+"/userResources/placeholder.png");
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         ImageModel imageData = imageRepository.findByName(uid).orElse(null);
         if(imageData == null){
             try {
                 if(BASE_DIR.startsWith("/"))BASE_DIR = BASE_DIR.substring(1);
                 Resource resource = new UrlResource("file:///"+BASE_DIR+"/userResources/placeholder.png");
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(resource);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        byte[] image = ImageUtils.decompressImage(imageData.getData());
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(image);
+    }
+
+    public ResponseEntity getPromosi(String uid) {
+        ImageModel imageData = imageRepository.findByName(uid).orElse(null);
+        if(imageData == null){
+            try {
+                if(BASE_DIR.startsWith("/"))BASE_DIR = BASE_DIR.substring(1);
+                Resource resource = new UrlResource("file:///"+BASE_DIR+"/userResources/promosi.jpg");
                 return ResponseEntity.ok()
                         .contentType(MediaType.IMAGE_PNG)
                         .body(resource);

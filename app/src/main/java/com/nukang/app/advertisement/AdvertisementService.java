@@ -1,6 +1,7 @@
 package com.nukang.app.advertisement;
 
 import com.nukang.app.image.ImageModel;
+import com.nukang.app.image.ImageService;
 import com.nukang.app.image.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class AdvertisementService {
     private final Logger log = LoggerFactory.getLogger(AdvertisementService.class);
     private final AdvertisementRepository advertisementRepository;
+    private final ImageService imageService;
     static String BASE_DIR = System.getProperty("user.dir");
 
     @Transactional
@@ -52,9 +54,6 @@ public class AdvertisementService {
                 e.printStackTrace();
             }
         }
-        byte[] image = ImageUtils.decompressImage(ad.getImageData());
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_PNG)
-                .body(image);
+        return imageService.getPromosi(uid+"");
     }
 }

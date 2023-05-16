@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Clob;
 import java.time.LocalDate;
 
 @Entity
@@ -32,9 +33,9 @@ public class Advertisement {
 
     @Column(name = "description")
     String desc;
-
-    @JsonIgnore
-    @Lob
-    @Column(name = "data")
-    private byte[] imageData;
+//
+//    @JsonIgnore
+//    @Lob
+//    @Column(name = "data")
+//    private byte[] imageData;
 }
