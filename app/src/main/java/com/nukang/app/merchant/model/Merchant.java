@@ -47,11 +47,11 @@ public class Merchant extends Audited {
     @Column(name = "province_code")
     private String provinceCode;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "province_code",insertable = false,updatable = false)
     private Province province;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id",insertable = false,updatable = false)
     private City city;
 
