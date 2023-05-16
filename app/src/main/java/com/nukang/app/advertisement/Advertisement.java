@@ -1,6 +1,7 @@
 package com.nukang.app.advertisement;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,6 +33,7 @@ public class Advertisement {
     @Column(name = "description")
     String desc;
 
+    @JsonIgnore
     @Lob
     @Column(name = "data")
     private byte[] imageData;

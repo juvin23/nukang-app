@@ -10,6 +10,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     static String BASE_DIR = System.getProperty("user.dir");
 
+    @Transactional
     ResponseEntity getActive(){
         log.info("[ads-service] start");
         LocalDate today = LocalDate.now();
