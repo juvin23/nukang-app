@@ -80,10 +80,12 @@ public class AuthService {
         );
         var user = appuserRepository.findByUsername(request.getUsername()).orElse(null);
         if(user == null) throw new Exception("User Not Found");
-        Optional<Merchant> merchant = merchantRepository.findByMerchantId(user.getUserId());
-        Optional<Customer> customer = customerRepository.findByCustomerId(user.getUserId());
-        if(merchant.isPresent() && merchant.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
-        if(customer.isPresent() && customer.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
+        else{
+            Optional<Merchant> merchant = merchantRepository.findByMerchantId(user.getUserId());
+            if(merchant.isPresent() && merchant.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
+            Optional<Customer> customer = customerRepository.findByCustomerId(user.getUserId());
+            if(customer.isPresent() && customer.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
+        }
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
