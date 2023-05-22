@@ -3,10 +3,12 @@ package com.nukang.app.Auth;
 import com.nukang.app.Auth.token.Token;
 import com.nukang.app.Auth.token.TokenRepository;
 import com.nukang.app.Auth.token.TokenType;
+import com.nukang.app.merchant.model.Merchant;
 import com.nukang.app.merchant.repository.MerchantRepository;
 import com.nukang.app.security.config.JwtService;
 import com.nukang.app.user.AppUser;
 import com.nukang.app.user.AppUserRepository;
+import com.nukang.app.user.model.Customer;
 import com.nukang.app.user.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -77,6 +80,10 @@ public class AuthService {
         );
         var user = appuserRepository.findByUsername(request.getUsername()).orElse(null);
         if(user == null) throw new Exception("User Not Found");
+        Optional<Merchant> merchant = merchantRepository.findByMerchantId(user.getUserId());
+        Optional<Customer> customer = customerRepository.findByCustomerId(user.getUserId());
+        if(merchant.isPresent() && merchant.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
+        if(customer.isPresent() && customer.get().getStatus().equalsIgnoreCase("suspended")) throw new Exception("User suspended");
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
