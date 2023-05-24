@@ -3,6 +3,7 @@ package com.nukang.app.merchant.controller;
 import com.nukang.app.merchant.model.Merchant;
 import com.nukang.app.merchant.repository.MerchantRepository;
 import com.nukang.app.merchant.service.MerchantService;
+import com.nukang.app.user.model.Customer;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,5 +47,17 @@ public class MerchantController{
             return ResponseEntity.ok(e);
         }
         return ResponseEntity.ok(newMerchant);
+    }
+
+    @PostMapping("/update")
+    ResponseEntity updateCustomer(@RequestBody Merchant merchant) throws Exception {
+        Merchant updatedMerchant;
+        try {
+            updatedMerchant = service.updateMerchant(merchant);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return ResponseEntity.ok(updatedMerchant);
     }
 }

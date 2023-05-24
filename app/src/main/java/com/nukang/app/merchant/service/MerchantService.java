@@ -5,6 +5,7 @@ import com.nukang.app.merchant.model.Merchant;
 import com.nukang.app.merchant.model.MerchantCategories;
 import com.nukang.app.merchant.model.QMerchant;
 import com.nukang.app.merchant.repository.MerchantRepository;
+import com.nukang.app.user.model.Customer;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
@@ -95,5 +96,46 @@ public class MerchantService {
 
     public Merchant findById(String userId) {
         return merchantRepository.findByMerchantId(userId).orElse(null);
+    }
+
+    public Merchant updateMerchant(Merchant merchant) throws Exception {
+        String uuid = merchant.getMerchantId().trim();
+        log.info("[update-Merchant] " + uuid +" start . . .");
+        Merchant updatedMerchant = merchantRepository.findByMerchantId(uuid).orElse(null);
+        if(updatedMerchant == null){
+            log.info("Merchant Id : " + uuid);
+            throw new Exception("Merchant ID Invalid");
+        }
+        String[] categories = merchant.getMerchantCategory().split(",");
+        Set<MerchantCategories> category = new HashSet<>();
+        for(String c : categories){
+            MerchantCategories newMerchantCategory = new MerchantCategories();
+            newMerchantCategory.setMerchant(merchant);
+            newMerchantCategory.setCategoryId(c);
+            category.add(newMerchantCategory);
+        }
+        updatedMerchant.setCategory(category);
+        for(MerchantCategories cat : updatedMerchant.getCategory()){
+            cat.setMerchant(updatedMerchant);
+        }
+        updatedMerchant.setAddress(merchant.getAddress());
+        updatedMerchant.setCityCode(merchant.getCityCode());
+        updatedMerchant.setProvinceCode(merchant.getProvinceCode());
+        updatedMerchant.setEmail(merchant.getEmail());
+        updatedMerchant.setDescription(merchant.getDescription());
+        updatedMerchant.setNumber(merchant.getNumber());
+        updatedMerchant.setName(merchant.getName());
+        updatedMerchant.setStatus("updated");
+        updatedMerchant.setEditedOn(LocalDateTime.now());
+        updatedMerchant.setEditedBy("System");
+        try {
+            updatedMerchant = merchantRepository.save(updatedMerchant);
+        }catch (Exception e){
+            log.error("error Update Merchant {}",updatedMerchant.getName() + updatedMerchant.getNumber());
+            log.error(e.getMessage());
+        }
+        log.info("Merchant created - {}", updatedMerchant.getMerchantId());
+
+        return updatedMerchant;
     }
 }
